@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import pandas as pd
 import sys
 import pygame
 import copy
