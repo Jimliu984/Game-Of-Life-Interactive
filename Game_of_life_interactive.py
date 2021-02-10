@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import sys
 import pygame
+import copy
 #GAME OF LIFE
 #If a living cell has fewer than 2 or greater than 3 neighbours, it dies
 #If an empty cell has 3 neighbours exactly, it becomes living
@@ -16,12 +17,12 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 w = 10
 Wide = int(WIDTH/w)
 Height = int(HEIGHT/w)
-Game = np.zeros((Height,Wide))
+Game = [[0]*Wide for _ in range(Height)]
 # Game = np.random.randint(0,2, size=(Height,Wide))
 # print(np.sum(Game))
 
 def Neighbours(Game):
-    Game1 = Game.copy()
+    Game1 = copy.deepcopy(Game)
     k = 0
     for a in range(Height):
         for b in range(Wide):
@@ -30,7 +31,7 @@ def Neighbours(Game):
                     if (a+c>=0 and b+d>=0) and (a+c<Height and b+d<Wide) and (c!=0 or d!=0):
                         if Game[a+c][b+d] == 1:
                             k = k + 1
-            Game1[a,b]=k
+            Game1[a][b]=k
             k=0
     return Game1
 def LifeorDeath(Game, Game1):
@@ -48,7 +49,7 @@ def LifeorDeath(Game, Game1):
     return Game
 
 def Plot(Game,C):
-    Game[C[0]][C[1]] = 1
+    Game[C[1]][C[0]] = 1
     pygame.draw.rect(screen, (0, 0, 200), (C[0] * w, C[1] * w, w, w))
     pygame.display.update()
     return Game
@@ -58,7 +59,7 @@ def Draw_Game(Game):
     for a in range(Height):
         for b in range(Wide):
             if Game[a][b]==1:
-                pygame.draw.rect(screen,(0,0,200),(a*w,b*w,w,w))
+                pygame.draw.rect(screen,(0,0,200),(b*w,a*w,w,w))
     pygame.display.update()
 
 screen.fill((255, 255, 255))
